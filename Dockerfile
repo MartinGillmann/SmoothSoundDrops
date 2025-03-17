@@ -18,10 +18,10 @@
 #	sudo truncate -s 0 /var/lib/docker/containers/<container_id>/<container_id>-json.log
 #
 #	*** Jump
-#	cd /home/pi/Docker/MusicDisplay
+#	cd /home/pi/Docker/Music-Display
 #	cd /var/lib/docker/containers
 #
-################################################################################3
+#################################################################################
 
 # Use an official Node.js image as the base
 # _________________________________________
@@ -43,16 +43,14 @@ RUN npm run build
 # Now let it run on nginx
 # _________________________________________
 FROM nginx:1.21-alpine
-#WORKDIR /usr/share/nginx/html
-WORKDIR /app2
+WORKDIR /app2/smoothsounddrops
 COPY --from=build /app1/build .
-RUN ls -als
+RUN sh -c 'echo "server { listen 80; server_name localhost; location /smoothsounddrops { root /app2; index index.html; } } " > /etc/nginx/conf.d/default.conf'
+
 
 EXPOSE 80
-#CMD ["nginx", "-g", "daemon off;"]
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
-#CMD ["bash", "-c", "while true; do sleep 1000; done"]    #bash: not found
-#CMD ["sh", "-c", "while true; do sleep 1000; done"]    #bash: not found
+
                       
