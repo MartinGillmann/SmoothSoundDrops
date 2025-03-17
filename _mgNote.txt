@@ -1,0 +1,207 @@
+https://www.youtube.com/watch?v=qJqjcxLvEwg
+npx create-react-app mein.online.shop
+cd 
+npm start
+
+
+https://www.youtube.com/watch?v=G6D9cBaLViA
+npm create vite@latest
+cd
+npm install
+npm install react-router-dom
+npm run dev
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+npx create-react-app <name>
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Structur
+./package.json
+./public/
+./src/
+./node_modules/ <<< after npm install
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+KILL
+netstat -ano | findstr :3000
+tasklist | findstr 3168
+tasklist | findstr node.exe
+taskkill /F /IM node.exe
+_____________________________________________________________________________________
+Conditional rendering: Video 29:54
+return (
+	<>
+		{_if_ ? (<div>...) : (<div>...)}
+	</>
+);
+
+return (
+	<>
+		{_if_ && <div>...</div>}
+	</>
+);
+
+_____________________________________________________________________________________
+Array interate: Video 34:31
+const movies = [ {id: 1}, {id: 2} ]
+movies.map(movie => <div needs key>...) 
+
+_____________________________________________________________________________________
+State
+import {useState} from "react"
+const [_state, _updateStatefunction] = useState(_defaultState);
+
+_____________________________________________________________________________________
+State (useEffect) (Video @ 1:13:00)
+import {useEffect} from "react"
+useEffect(fnc, depenencyArray)
+
+
+_____________________________________________________________________________________
+Load data from API 
+const response = await fetch(`${BASE_URL}/test?id=13&id2=${encodeURIComponent(tobesecaped)}`);
+const data = await response.json();
+return data.results;
+_____________________________________________________________________________________
+Routing (NavBar in video @ 54:00)
+in index.js:
+import {BrowserRouter} from "react-router-dom"
+<BrowserRouter><App /></BrowserRouter>
+in App.js:
+import {Routes, Route} from "react-router-dom"
+<main>
+	<Routes>
+		<Route path="/" element={<Home />}>
+		<Route path="/favorites" element={<Favorite />}>
+	</Routes>
+</main>
+
+_____________________________________________________________________________________
+Hooks and methods manage state, lifecycle, and side effects. 
+
+useState
+    const [count, setCount] = useState(0);
+
+useEffect
+    useEffect(() => {
+      console.log("Component mounted or updated");
+    }, [dependency]);
+
+useLayoutEffect
+    useLayoutEffect(() => {
+      console.log("DOM updated");
+    });
+
+useContext
+    const value = useContext(MyContext);
+
+useReducer
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+useRef
+    const inputRef = useRef(null);
+
+useImperativeHandle
+    useImperativeHandle(ref, () => ({
+      focus: () => inputRef.current.focus(),
+    }));
+
+useMemo
+  - Purpose: Memoize computed values to avoid unnecessary recalculations.
+  - Example:
+    ```jsx
+    const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+    ```
+
+- **`useCallback`**
+  - Purpose: Memoize functions to avoid unnecessary re-creation on each render.
+  - Example:
+    ```jsx
+    const memoizedCallback = useCallback(() => doSomething(a, b), [a, b]);
+    ```
+
+---
+
+### **7. Transition Hooks**
+These hooks manage rendering priority in React's Concurrent Mode.
+
+- **`useTransition`**
+  - Purpose: Defer non-urgent updates to improve UI responsiveness.
+  - Example:
+    ```jsx
+    const [isPending, startTransition] = useTransition();
+    ```
+
+- **`useDeferredValue`**
+  - Purpose: Delay updating a value to prioritize rendering.
+  - Example:
+    ```jsx
+    const deferredValue = useDeferredValue(value);
+    ```
+
+---
+
+### **8. Debugging Hooks**
+These hooks assist in debugging and inspecting React components.
+
+- **`useDebugValue`**
+  - Purpose: Display debug information for custom hooks in React DevTools.
+  - Example:
+    ```jsx
+    useDebugValue(value, formatValue);
+    ```
+
+---
+
+### **9. ID and External State Hooks**
+These hooks provide unique IDs or manage state outside React.
+
+- **`useId`**
+  - Purpose: Generate unique IDs for accessible components.
+  - Example:
+    ```jsx
+    const id = useId();
+    ```
+
+- **`useSyncExternalStore`**
+  - Purpose: Subscribe to external state stores (e.g., Redux).
+  - Example:
+    ```jsx
+    const state = useSyncExternalStore(subscribe, getSnapshot);
+    ```
+
+---
+
+### **10. Error Handling Hook**
+This hook manages errors in React components.
+
+- **`useErrorBoundary`** (Experimental, part of React 18+ updates)
+  - Purpose: Handle and recover from errors within components.
+  - Example:
+    ```jsx
+    const { error, resetErrorBoundary } = useErrorBoundary();
+    ```
+
+---
+
+### **Summary Table**
+
+| Hook                  | Category            | Purpose                                               |
+|-----------------------|---------------------|-------------------------------------------------------|
+| `useState`            | Core State          | Manage local state.                                   |
+| `useEffect`           | Lifecycle           | Perform side effects.                                 |
+| `useLayoutEffect`     | Lifecycle           | Synchronize with DOM updates.                        |
+| `useContext`          | Context             | Consume values from context.                         |
+| `useReducer`          | Reducer             | Manage complex state logic.                          |
+| `useRef`              | Ref                 | Access mutable refs or DOM elements.                 |
+| `useImperativeHandle` | Ref                 | Expose custom ref instance.                          |
+| `useMemo`             | Memoization         | Memoize computed values.                             |
+| `useCallback`         | Memoization         | Memoize callback functions.                          |
+| `useTransition`       | Transition          | Manage low-priority updates.                         |
+| `useDeferredValue`    | Transition          | Defer updates to improve rendering.                  |
+| `useDebugValue`       | Debugging           | Add debug information for custom hooks.              |
+| `useId`               | ID                  | Generate unique IDs.                                 |
+| `useSyncExternalStore`| External State      | Subscribe to external stores.                        |
+| `useErrorBoundary`    | Error Handling      | Manage and recover from errors (experimental).       |
+
+---
+
+These hooks give you granular control over state, performance, and side effects in React. They are designed to handle a wide variety of use cases in modern applications.
