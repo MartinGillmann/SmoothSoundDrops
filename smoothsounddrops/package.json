@@ -2,7 +2,7 @@
   "name": "music-display",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://10.41.11.54/smoothsounddrops/",
+  "homepage": "localhost",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

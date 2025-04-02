@@ -1,0 +1,10 @@
+
+server {
+    listen 80;
+    server_name ph-server-name;
+
+    location /ph-smooth-path/ {
+        alias /app/smoothsounddrops/build/;
+        index index.html;
+    }
+}
