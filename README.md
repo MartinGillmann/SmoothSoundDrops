@@ -23,4 +23,7 @@ Then open in with http://__YOUR_IP__:8089/smoothsounddrops/
 - node_modules (wird durch 'npm install' erzeugt)
 - build        (wird durch 'npm run build' erzeugt)
 
+## Development
+npm start
+
 

@@ -3,7 +3,7 @@
 import SongButton from './components/SongButton';
 import SongPic from './components/SongPic';
 import { useState, useEffect } from "react"
-import { getSongData, getAvailableSongs } from "./services/api"
+import backendApi from "./services/BackendApi";
 import { getWholeSvg, getPartSvg, getCallbacks } from "./services/songPicConfig"
 import { calcKeyId } from "./services/keyCalculator"
 import React from "react";
@@ -20,7 +20,7 @@ function App() {
 
     useEffect(() => {
         const loadsAavailabelSongs = async () => {
-            const loaded = await getAvailableSongs()
+            const loaded = await backendApi.getAvailableSongs()
             set_availabel_songs(loaded)
         }
         loadsAavailabelSongs()
@@ -28,7 +28,7 @@ function App() {
 
     useEffect(() => {
         const loadSongData = async () => {
-            const loadedData = await getSongData(s_selected_song)
+            const loadedData = await backendApi.getSongData(s_selected_song)
             set_the_song_data(loadedData);
         }
 

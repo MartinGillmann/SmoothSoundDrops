@@ -3,7 +3,7 @@
 import SongButton from '../components/SongButton';
 import SongPic from '../components/SongPic';
 import { useState, useEffect } from "react"
-import { getSongData } from "../services/api"
+import backendApi from "../services/BackendApi";
 import { getWholeSvg, getPartSvg, getCallbacks } from "../services/songPicConfig"
 import { calcKeyId } from "../services/keyCalculator"
 import React from "react";

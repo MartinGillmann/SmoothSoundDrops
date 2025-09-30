@@ -23,6 +23,9 @@
 #	rm -rf *
 #	sudo truncate -s 0 /var/lib/docker/containers/<container_id>/<container_id>-json.log
 #
+#   *** Full Recycle (build first)
+#	sudo docker build -t i_smooth_sound_drops -f Docker/Dockerfile . && sudo docker rm -f c_smooth_sound_drops && sudo docker run -d -t --name c_smooth_sound_drops -p 8090:80 -e PLACEHOLDER_PROTOCOL="http" -e PLACEHOLDER_DOMAIN="famgillmann.ch" -e PLACEHOLDER_PATH="SmoothSoundDrops" i_smooth_sound_drops
+#
 #   *** Full Recycle	
 # 	sudo docker rm -f c_smooth_sound_drops && sudo docker rmi -f i_smooth_sound_drops && sudo docker build -t i_smooth_sound_drops -f Docker/Dockerfile .
 # 	sudo docker rm -f c_smooth_sound_drops && sudo docker rmi -f i_smooth_sound_drops && sudo docker build -t i_smooth_sound_drops -f Docker/Dockerfile . && sudo docker run -d -t --name c_smooth_sound_drops -p 8090:80 -e PLACEHOLDER_PROTOCOL="http" -e PLACEHOLDER_DOMAIN="famgillmann.ch" -e PLACEHOLDER_PATH="SmoothSoundDrops" i_smooth_sound_drops
