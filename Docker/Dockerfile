@@ -1,16 +1,22 @@
 #
 #	sudo docker build -t i_smooth_sound_drops -f Docker/Dockerfile .
-#	sudo docker run -d -t --name c_smooth_sound_drops --cpus="0.50" -p 8090:80 --restart unless-stopped -e PLACEHOLDER_BASEURL="http://famgillmann.ch/SmoothSoundDrops" i_smooth_sound_drops
+#	sudo docker run -d -t --name c_smooth_sound_drops -p 8090:80 -e PLACEHOLDER_PROTOCOL="http" -e PLACEHOLDER_DOMAIN="famgillmann.ch" -e PLACEHOLDER_PATH="SmoothSoundDrops" i_smooth_sound_drops
 #
 #	* List / Analyse
 #	sudo docker image ls -a
 #	sudo docker container ls -a
 #	sudo docker logs c_smooth_sound_drops
 #	sudo ss -tulnp | grep docker
-
+#	sudo docker exec -it c_smooth_sound_drops cat /var/startup.log
+#	sudo docker inspect --format='{{json .NetworkSettings.Ports}}' c_smooth_sound_drops
+#	sudo docker inspect c_smooth_sound_drops | grep IPAddress
+#   curl -v --connect-to famgillmann.ch:80:10.41.11.54:8090 http://famgillmann.ch/SmoothSoundDrops/
+#
+#
 #
 #	* Step into
 #	sudo docker exec -it  c_smooth_sound_drops /bin/sh
+#   sudo docker exec -it  c_smooth_sound_drops cat /var/startup.log
 #
 #	*** Remove
 #	sudo docker rm -f c_smooth_sound_drops && sudo docker rmi -f i_smooth_sound_drops
@@ -27,6 +33,28 @@
 #	cd /var/lib/docker/containers
 #
 #################################################################################
+# Deployment Explained
+# 1) In C:\CSharpSolutions\ReactProjects\SmoothSoundDrops\smoothsounddrops muss
+#   - build
+#   - node_modules
+# gelöscht werden
+#
+# 2) C:\CSharpSolutions\ReactProjects\SmoothSoundDrops\_2_Code_to_Pi.bat
+#   kopiert SmoothSoundDrops/smoothsounddrops/ und SmoothSoundDrops/Docker/ zu Docker
+#
+# 3) Docker image build und docker run container...
+# StartUp.sh started 
+#   - ReplacePlaceholders.sh
+#   - npm run build
+#   - nginx
+# 3.1) ReplacePlaceholders.sh ersetzt
+#	- PLACEHOLDER_PROTOCOL
+#   - PLACEHOLDER_PATH
+#	- PLACEHOLDER_DOMAIN
+# in 
+#	- nginxConfig.txt
+#	- package.json
+#
 
 # Use an official Node.js image as the base
 # _________________________________________
