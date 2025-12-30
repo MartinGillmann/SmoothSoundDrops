@@ -25,6 +25,9 @@ echo "$(date) *** nginxConfig.txt ..." >> /var/startup.log
 dos2unix Docker/nginxConfig.txt
 cp Docker/nginxConfig.txt /etc/nginx/conf.d/default.conf
 
+rm /etc/nginx/sites-available/default
+rm /etc/nginx/sites-enabled/default
+
 echo "$(date) *** NGINX: $(nginx -T)" >> /var/startup.log
 
 
@@ -33,5 +36,6 @@ echo "$(date) *** Now you are ready to cUrl into it :-)" >> /var/startup.log
 nginx -g "daemon off;"
 
 echo "$(date) *** StartUp.sh done" >> /var/startup.log
+
 
 
