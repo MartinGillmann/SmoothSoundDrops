@@ -1,10 +1,11 @@
 
 server {
     listen 80;
-    server_name ph-server-name;
+    server_name _;
 
     location /ph-smooth-path/ {
         alias /app/smoothsounddrops/build/;
         index index.html;
     }
 }
+
