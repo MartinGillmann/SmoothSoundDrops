@@ -1,6 +1,8 @@
 echo "$(date) *** In StartUp.sh ..." >> /var/startup.log
 
+# Expected to be in /app/Docker
 echo "$(date) *** Pwd is $(pwd)" >> /var/startup.log
+cp ../smoothsounddrops/package.json ../smoothsounddrops/_orig_package.json
 
 chmod +x ReplacePlaceholders.sh
 dos2unix ReplacePlaceholders.sh
@@ -31,4 +33,5 @@ echo "$(date) *** Now you are ready to cUrl into it :-)" >> /var/startup.log
 nginx -g "daemon off;"
 
 echo "$(date) *** StartUp.sh done" >> /var/startup.log
+
 
