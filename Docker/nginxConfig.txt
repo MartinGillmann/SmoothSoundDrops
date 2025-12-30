@@ -12,6 +12,10 @@ server {
         alias /app/smoothsounddrops/build/;
         index index.html;
     }
-}
 
+    location /test {
+        return 200 "\n\n***Ok***\n\n";
+        add_header Content-Type text/plain;
+    }
+}
 
