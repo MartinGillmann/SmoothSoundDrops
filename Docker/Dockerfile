@@ -11,6 +11,8 @@
 #	sudo docker inspect --format='{{json .NetworkSettings.Ports}}' c_smooth_sound_drops
 #	sudo docker inspect c_smooth_sound_drops | grep IPAddress
 #   curl -v --connect-to famgillmann.ch:80:10.41.11.54:8090 http://famgillmann.ch/SmoothSoundDrops/
+#   sudo docker exec -it c_smooth_sound_drops tail /var/log/nginx/access.log
+#   sudo docker exec -it c_smooth_sound_drops tail /var/log/nginx/error.log
 #
 #
 #
@@ -32,7 +34,7 @@
 #
 #
 #	*** Jump
-#	cd /home/pi/Docker/Music-Display
+#	cd /home/pi/Docker/SmoothSoundDrops
 #	cd /var/lib/docker/containers
 #
 #################################################################################

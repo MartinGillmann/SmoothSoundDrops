@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "localhost",
-  "proxy": "http://localhost:3001",
+  "proxy_test1": "curl -v http://10.41.11.54:8210/backend/smoothsounddrops/availablesongs",
+  "proxy_test2": "GET     http://localhost:3000/backend/smoothsounddrops/availablesongs",
+  "proxy": "http://10.41.11.54:8210",
+  "proxy_": "http://localhost:3001",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -38,5 +41,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18"
   }
 }

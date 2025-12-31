@@ -1,22 +1,32 @@
 
 //import Test from './Test';
-import SongButton from '../components/SongButton';
+import AnyButton from '../components/AnyButton';
 import SongPic from '../components/SongPic';
 import { useState, useEffect } from "react"
 import backendApi from "../services/BackendApi";
-import { getWholeSvg, getPartSvg, getCallbacks } from "../services/songPicConfig"
+import { getWholeSvg, getPartSvg, getPartSvg_V2, getPartSvg_V3, getCallbacks } from "../services/songPicConfig"
 import { calcKeyId } from "../services/keyCalculator"
 import React from "react";
 import * as Tone from "tone";
+import TimeSlider from './TimeSlider';
+import { useScreenSize } from "../hooks/useScreenSize"
 
 
 
 
-function AppSongSelected({ the_song_data, song_btn_count }) {
+
+function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
     //console.log("In AppSongSelected ", the_song_data)
 
+    const calcHeight = () => {
+        if (window.innerHeight === 669) {
+            return 585;
+        }
+        return window.innerWidth * 0.83;
+    }
+
     const picWidth = window.innerWidth * 0.95;
-    const picHeight = window.innerHeight * 0.8;
+    const picHeight = calcHeight();
     const keyWidth = picWidth / 56;
 
     const picSplitPre = picHeight * 0.2
@@ -25,42 +35,44 @@ function AppSongSelected({ the_song_data, song_btn_count }) {
     const picSplitKeyB = picHeight * 0.1
     const picSplitMain = picHeight - picSplitPre - picSplitPos - picSplitZero - picSplitKeyB
 
+    const timeSliderBackground = "linear-gradient(to right,#e5e7eb 0%, #e5e7eb 34%, red 34%, red 36%, #e5e7eb 36%, #e5e7eb 49%, green 49%, green 51%, #e5e7eb 51%, #e5e7eb)";
+
     let actOnReset = null
 
     const [s_last_song_btn_count, set_last_song_btn_count] = useState(0)
     const [s_time_elapsed, set_time_elapsed] = useState(0);
     const [s_isActive, setIsActive] = useState(true);
+    const [s_speed, set_speed] = useState(1.0);
     const [s_tone_sampler, set_tone_sampler] = useState(null)
     const [init_tones_played, set_init_tones_played] = useState([[-1], [-1], [-1], [-1], [-1]])
     const [s_tones_played, set_tones_played] = useState(init_tones_played)
 
-    const [s_all_parts, set_all_parts] = useState([
-        getPartSvg("Pre",
-            40000, 10000,     // timeRange, timeOffset
-            picSplitPre, picSplitPos + picSplitZero + picSplitKeyB + picSplitMain,
-            false, false, false),
-        getPartSvg("Main",
-            10000, 0,         //  timeRange, timeOffset
-            picSplitMain, picSplitPos + picSplitZero + picSplitKeyB,
-            false, false, false),
-        getPartSvg("Zero",
-            100, 100,          // timeRange, timeOffset,
-            picSplitZero, picSplitPos,
-            true, false, false),
-        getPartSvg("KeyB",              // name
-            500, 0,                     // timeRange, timeOffset
-            picSplitKeyB, picSplitPos,  // partHeight, yOffset
-            false, true, true),         // useTones, debug, isKeyBoard
-        getPartSvg("Pos",
-            5000, -5000,      //   timeRange, timeOffset
-            picSplitPos, 0,
-            false, false, false)
-    ])
+    const calcPartSvg = () => {
+        let ret = [];
+
+        //                                Time________      part.Height______________
+        //                                Range Offset          Top0PercentStart,   Top0PercentEnd
+        //                                                                                                  useTones
+        //                                                                                                         debug
+        //                                                                                                                isKeyBoard
+        //                                                                                                                       showTactLines
+        ret = [...ret, getPartSvg_V3("Main", 10000,     0,       0,                 46,                     false, false, false,  true, picHeight)];
+        ret = [...ret, getPartSvg_V3("KeyB",   500,     0,      46,                 54,                     false, false,  true, false, picHeight)];
+        ret = [...ret, getPartSvg_V3("Pos ", 10000, -10000,      54,               100,                      false, false, false,  true, picHeight)];
+
+        ret = [...ret, getPartSvg("Zero",   100,   100, 0, 1,                                               true, false, false, false, picHeight)];
+        return ret;
+
+    }
+    const [s_all_parts, set_all_parts] = useState(calcPartSvg())
 
     const playThisId = (uid) => {
         //console.log("In playThisId ", uid, typeof the_song_data, " ", the_song_data)
         const foundKey = the_song_data.find(item => item.id === uid);
         //console.log("T2: ", foundKey)
+        if (foundKey.etype !== "T") {
+            return;
+        }
         const foundKeyId = calcKeyId(foundKey)
         //console.log("T3: ", foundKeyId)
 
@@ -111,13 +123,16 @@ function AppSongSelected({ the_song_data, song_btn_count }) {
     useEffect(() => {
         // Create an interval that updates the state every 250ms (4 times per second)
         const interval = setInterval(() => {
-            set_time_elapsed((prevCount) => { return prevCount + (s_isActive ? 50 : 0) }); // Update state
+            set_time_elapsed((prevCount) =>
+            {
+                return prevCount + (s_isActive ? (50 * s_speed ) : 0)//todo
+            }); // Update state
         }, 50);
 
         // Cleanup interval on component unmount
         return () => clearInterval(interval);
 
-    }, [s_isActive]);
+    }, [s_isActive, s_speed]);
 
     useEffect(() => {
         const doResetNeeded = () => {
@@ -134,13 +149,33 @@ function AppSongSelected({ the_song_data, song_btn_count }) {
 
     function actOnStartStop() {
         setIsActive((prevState) => !prevState);
-
     }
 
     actOnReset = () => {
         set_time_elapsed(0);
         set_tones_played(init_tones_played);
         setIsActive(true);
+    }
+
+    function speed_DecToSpeed(d) {
+        if (d >= 50) {
+            d -= 50;
+            d *= 4;
+            d /= 50
+            d += 1;
+            return d.toFixed(2);
+        } else {
+            return (0.06 * d - 2).toFixed(2);
+        }
+    }
+    function speed_getText(decVal) {
+        return "";
+//        return "Speed: " + speed_DecToSpeed(decVal);
+    }
+    function speed_onValChanged(decVal) {
+        set_speed(speed_DecToSpeed(decVal));
+        setIsActive(true);
+        return decVal;
     }
 
     function actOnArrowRight() {
@@ -187,18 +222,19 @@ function AppSongSelected({ the_song_data, song_btn_count }) {
             tabIndex={0}
             onKeyDown={handleKeyPress}
         >
-            <div>El:{s_time_elapsed} isActive:{JSON.stringify(s_isActive)}</div>
-            <div>
-                <button onClick={actOnStartStop} >Run</button>
-            </div>
-            <div>
-                <button onClick={actOnReset} >Reset</button>
-            </div>
-            <div>
-                <button onClick={actOnArrowRight} >==&gt;</button>
-            </div>
-            <div>
-                <button onClick={actOnArrowLeft} >&lt;==</button>
+            <div className="flex justify-start space-x-2">
+                <AnyButton text="Other song" onclick={onResetSongBtn} />
+                <AnyButton text="Start/Stop" onclick={actOnStartStop} />
+                <AnyButton text="Reset" onclick={actOnReset} />
+                <AnyButton text="==>" onclick={actOnArrowRight} />
+                <AnyButton text="<==" onclick={actOnArrowLeft} />
+                <div>{s_time_elapsed}ms</div>
+                <TimeSlider  
+                    in_default={50}
+                    onValChanged={speed_onValChanged}
+                    getText={speed_getText}
+                    in_style_background={timeSliderBackground}
+                />
             </div>
 
             <SongPic

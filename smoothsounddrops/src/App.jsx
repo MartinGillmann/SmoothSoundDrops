@@ -1,14 +1,11 @@
 
 //import Test from './Test';
-import SongButton from './components/SongButton';
-import SongPic from './components/SongPic';
+import AnyButton from './components/AnyButton';
 import { useState, useEffect } from "react"
 import backendApi from "./services/BackendApi";
-import { getWholeSvg, getPartSvg, getCallbacks } from "./services/songPicConfig"
-import { calcKeyId } from "./services/keyCalculator"
 import React from "react";
-import * as Tone from "tone";
 import AppSongSelected from './components/AppSongSelected';
+import ScreenTest from './components/ScreenTest';
 
 
 function App() {
@@ -46,29 +43,42 @@ function App() {
         set_the_song_data(null)
     }
 
+    const path = window.location.pathname;
+    const queri = new URLSearchParams(window.location.search);
+
+    const queriHas = (txt) => {
+        if (queri.has(txt)) {
+            return true;
+        }
+        return [...queri.values()].some(v =>
+            v.includes(txt) 
+        );
+    }
 
     if (s_availabel_songs === null) {
         return (<div />);
     }
     //console.log("In App ", s_availabel_songs, " ", s_selected_song)
 
+    if (queriHas("screentest")) {
+        return (
+            <ScreenTest />
+        );
+    }
 
     return (
         <>
             {s_selected_song === null && <div>
-                <div>Please select a song</div>
-                { 
-                    s_availabel_songs.map((e, i) =>
-                    {
-                        return (<SongButton text={e} key={i} onSongBtn={onSongBtn} />)
+                <div className="w-full mb-4 text-lg font-medium text-gray-700">Please select a song</div>
+                {
+                    s_availabel_songs.map((e, i) => {
+                        return (<AnyButton text={e} key={i} onclick={onSongBtn} />)
                     })
                 }
             </div>}
-            {s_selected_song !== null && <div>
-                <SongButton text="Other song" onSongBtn={onResetSongBtn} />
-            </div>}
+
             <hr></hr>
-            <AppSongSelected the_song_data={the_song_data} song_btn_count={s_song_btn_count}>
+            <AppSongSelected the_song_data={the_song_data} song_btn_count={s_song_btn_count} onResetSongBtn={onResetSongBtn}>
             </AppSongSelected>
         </>
     )

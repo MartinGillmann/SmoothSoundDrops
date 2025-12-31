@@ -111,28 +111,43 @@ const c_calculation = (partSvg, c1) => {
 }
 
 export const calcKeyData = (key, index, wholeSvg, partSvg, timeElapsed) => {
-
-//    console.log("In calcKeyData")
-//    console.log(key)
+    //In calcKeyData keyCalculator.js: 115: 1
+    // Object { id: 97, etype: "T", pitch: "_2_C", startMs: 12243, endMs: 12925, text: null }
+    //console.log("In calcKeyData")
+    //console.log(key)
 //    console.log(wholeSvg)
 //    console.log(partSvg)
-//    console.log(timeElapsed)
+    //    console.log(timeElapsed)
 
-    const keyId = calcKeyId(key);
-    //console.log(keyId)
+    let keyId = null;
+    let x1 = 0;
+    let xd = 0;
+    let color = '';
+    let keytext = key.text;
 
     // X <<<<<<<<<<<<<<<<<<<
-    let x1 = keyId.noteUid;
-    let xd = 0;
+    if (key.etype === "T") {
+        keyId = calcKeyId(key);
+        x1 = keyId.noteUid;
+        xd = 0;
 
-    if (keyId.isBlack) {
-        x1 *= wholeSvg.keyWidth;
-        x1 += wholeSvg.keyWidth * 3 / 4;
-        xd = wholeSvg.keyWidth / 2;
-    }
-    else {
-        x1 *= wholeSvg.keyWidth;
-        xd = wholeSvg.keyWidth;
+        if (keyId.isBlack) {
+            x1 *= wholeSvg.keyWidth;
+            x1 += wholeSvg.keyWidth * 3 / 4;
+            xd = wholeSvg.keyWidth / 2;
+        }
+        else {
+            x1 *= wholeSvg.keyWidth;
+            xd = wholeSvg.keyWidth;
+        }
+
+        // Color <<<<<<<<<<<<<<<
+        color = calcKeyColor(key)
+
+    } else if (key.etype === "A") {
+        x1 = 0;
+        xd = wholeSvg.picWidth;
+        color = `rgb(120, 120, 120)`;
     }
     //console.log(x1)
     //console.log(xd)
@@ -147,7 +162,8 @@ export const calcKeyData = (key, index, wholeSvg, partSvg, timeElapsed) => {
     //console.log(debug)
 
 
-    const yd = y1 - y2;
+    let yd = y1 - y2;
+    if (yd < 1) { yd = 1 }
     y1 -= yd
     const yOffset = wholeSvg.picHeight - partSvg.partHeight - partSvg.yOffset
     y1 = y1 + yOffset
@@ -157,13 +173,11 @@ export const calcKeyData = (key, index, wholeSvg, partSvg, timeElapsed) => {
     //console.log(y1)
     //console.log(yd)
 
-    // Color <<<<<<<<<<<<<<<
-    let color = calcKeyColor(key)
     //console.log(color)
 
     debug = `${debug} c:${JSON.stringify(c)} key:${JSON.stringify(key)} keyId:${JSON.stringify(keyId)}, partSvg:${JSON.stringify(partSvg)}, ${JSON.stringify(timeElapsed)}`
 
-    const ret = { x1, xd, y1, yd, color, key, keyId, debug };
+    const ret = { x1, xd, y1, yd, color, key, keyId, debug, keytext };
     //console.log(ret)
     return ret;
 }
