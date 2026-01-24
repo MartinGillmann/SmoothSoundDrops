@@ -226,8 +226,8 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
                 <AnyButton text="Other song" onclick={onResetSongBtn} />
                 <AnyButton text="Start/Stop" onclick={actOnStartStop} />
                 <AnyButton text="Reset" onclick={actOnReset} />
-                <AnyButton text="==>" onclick={actOnArrowRight} />
                 <AnyButton text="<==" onclick={actOnArrowLeft} />
+                <AnyButton text="==>" onclick={actOnArrowRight} />
                 <div>{s_time_elapsed}ms</div>
                 <TimeSlider  
                     in_default={50}

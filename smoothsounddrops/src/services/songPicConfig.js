@@ -21,7 +21,7 @@ export const getPartSvg = (name, timeRange, timeOffset, partHeight, yOffset, use
 export const getPartSvg_V2 = (name, timeRange, timeOffset, partHeightPercent, partTopOffsetPercent, useTones, debug, isKeyBoard, showTactLines, picHeight) => {
     let partHeight = partHeightPercent*0.01 * picHeight;
     let yOffset = picHeight- (partTopOffsetPercent * 0.01 * picHeight)
-    console.log(picHeight, partHeight, yOffset)
+    //console.log(picHeight, partHeight, yOffset)
     return { name, timeRange, timeOffset, partHeight, yOffset, useTones, debug, isKeyBoard, showTactLines };
 }
 

@@ -2,7 +2,7 @@ import {getSongPicConfig} from "./songPicConfig"
 
 export const calcKeyId = (key) => {
     const sp = key.pitch.split("_");
-    const oktav = parseInt(sp[1], 10) -1;
+    const oktav = parseInt(sp[1], 10);
     let isBlack = false;
     if (sp.length === 4) {
         isBlack = true;
@@ -33,7 +33,9 @@ export const calcKeyId = (key) => {
         tone = `${noteC[0]}${oktav}`
     }
     const toneDuration = (key.endMs - key.startMs) / 1000
-    return { noteUid, keyUid, isBlack, oktav, noteC, noteI, tone, toneDuration };
+    let ret = { noteUid, keyUid, isBlack, oktav, noteC, noteI, tone, toneDuration };
+    //console.log(`calcKeyId ${JSON.stringify(key)} ==> ${JSON.stringify(ret)}`);
+    return ret;
 }
 
 const calcKeyColor = (key) => {
