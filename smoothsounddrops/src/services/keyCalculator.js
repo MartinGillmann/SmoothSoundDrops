@@ -1,4 +1,3 @@
-import {getSongPicConfig} from "./songPicConfig"
 
 export const calcKeyId = (key) => {
     const sp = key.pitch.split("_");

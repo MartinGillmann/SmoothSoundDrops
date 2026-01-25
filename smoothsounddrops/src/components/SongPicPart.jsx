@@ -1,8 +1,7 @@
 
 import React from "react";
 import {calcKeyData, isInTimeRange, allKeyboardKeys} from "../services/keyCalculator"
-import { getSongPicConfig, getUpdatedStructAndIndex } from "../services/songPicConfig"
-//import { useState, useEffect } from "react"
+import { getUpdatedStructAndIndex } from "../services/songPicConfig"
 
 
 function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index, onToneFill }) {

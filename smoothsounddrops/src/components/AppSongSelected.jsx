@@ -63,11 +63,16 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
 
         ret = [...ret, getPartSvg("Zero",   100,   100, 0, 1,                                               true, false, false, false, picHeight)];
         return ret;
-
     }
+
     const [s_all_parts, set_all_parts] = useState(calcPartSvg())
 
     const playThisId = (uid) => {
+        if (!s_tone_sampler) {
+            return;
+        }
+
+
         //console.log("In playThisId ", uid, typeof the_song_data, " ", the_song_data)
         const foundKey = the_song_data.find(item => item.id === uid);
         //console.log("T2: ", foundKey)
@@ -120,6 +125,10 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
 
         loadTone()
     }, []);
+
+    useEffect(() => {
+        set_all_parts(calcPartSvg());
+    }, [picWidth, picHeight]);
 
     useEffect(() => {
         // Create an interval that updates the state every 250ms (4 times per second)

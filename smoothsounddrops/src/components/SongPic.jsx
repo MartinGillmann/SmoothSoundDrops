@@ -1,7 +1,5 @@
 
 
-import {calcKeyData, allKeyboardKeys} from "../services/keyCalculator"
-import {getSongPicConfig} from "../services/songPicConfig"
 import {SongPicParts} from "./SongPicParts"
 
 function SongPic({ data, wholeSvg, timeElapsed, allParts, allNotesPlayed, onToneFill }) {
