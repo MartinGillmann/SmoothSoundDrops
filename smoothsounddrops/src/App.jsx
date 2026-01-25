@@ -44,13 +44,13 @@ function App() {
     }
 
     const path = window.location.pathname;
-    const queri = new URLSearchParams(window.location.search);
+    const query = new URLSearchParams(window.location.search);
 
     const queriHas = (txt) => {
-        if (queri.has(txt)) {
+        if (query.has(txt)) {
             return true;
         }
-        return [...queri.values()].some(v =>
+        return [...query.values()].some(v =>
             v.includes(txt) 
         );
     }

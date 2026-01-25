@@ -25,8 +25,9 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
         return window.innerWidth * 0.83;
     }
 
-    const picWidth = window.innerWidth * 0.95;
-    const picHeight = calcHeight();
+    const [picWidth, setPicWidth] = useState(window.innerWidth * 0.95);
+    const [picHeight, setPicHeight] = useState(calcHeight());
+
     const keyWidth = picWidth / 56;
 
     const picSplitPre = picHeight * 0.2
@@ -208,6 +209,24 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
         }
     }
 
+    function onScreen_HP() {
+        setPicHeight(picHeight + 10);
+        console.log(picHeight);
+    }
+    function onScreen_HM() {
+        setPicHeight(picHeight - 10);
+        console.log(picHeight);
+    }
+    function onScreen_WP() {
+        setPicWidth(picWidth + 10);
+        console.log(picWidth);
+    }
+    function onScreen_WM() {
+        setPicWidth(picWidth - 10);
+        console.log(picWidth);
+    }
+
+
     if (the_song_data === null) {
         return (<div />);
     }
@@ -235,6 +254,10 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
                     getText={speed_getText}
                     in_style_background={timeSliderBackground}
                 />
+                <AnyButton text="Screen H-" onclick={onScreen_HM} />
+                <AnyButton text="Screen H+" onclick={onScreen_HP} />
+                <AnyButton text="Screen W-" onclick={onScreen_WM} />
+                <AnyButton text="Screen W+" onclick={onScreen_WP} />
             </div>
 
             <SongPic
