@@ -1,6 +1,6 @@
 
 import React from "react";
-import {calcKeyData, isInTimeRange, allKeyboardKeys} from "../services/keyCalculator"
+import { calcKeyData, isInTimeRange, allKeyboardKeys } from "../services/keyCalculator"
 import { getUpdatedStructAndIndex } from "../services/songPicConfig"
 
 
@@ -18,7 +18,7 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
     }
 
     const fillTone = (newData) => {
-        const newData2 = [ ...newData ];
+        const newData2 = [...newData];
         onToneFill(getUpdatedStructAndIndex(newData2, index));
     };
     const fillToneIfAny = (newData) => {
@@ -47,46 +47,46 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
         <>
             {svgPart.debug &&
                 <>
-                <line
-                    x1={50}
-                    y1={50}
-                    x2={100}
-                    y2={100}
-                />
-                <rect
-                    x={wholeSvg.picWidth *0.75}
-                    y={wholeSvg.picHeight - svgPart.partHeight - svgPart.yOffset}
-                    width={wholeSvg.picWidth / 10}
-                    height={svgPart.partHeight}
-                    fill="blue"
-                    stroke="yellow" // Optional: Add stroke to highlight the rectangle
-                    strokeWidth="10"
-                />
-                <rect
-                    x={(wholeSvg.picWidth / 4) + 45}
-                    y={wholeSvg.picHeight - svgPart.partHeight - svgPart.yOffset}
-                    width={wholeSvg.picWidth / 5}
-                    height={svgPart.partHeight}
-                    fill="none"
-                    stroke="black" // Optional: Add stroke to highlight the rectangle
-                    strokeWidth="1">
-                </rect>
-                <text
-                    x={0}
-                    y={wholeSvg.picHeight - svgPart.partHeight - svgPart.yOffset}
-                    textAnchor="start"
-                    dominantBaseline="hanging"
-                >
-                    '{svgPart.name}' H:{wholeSvg.picHeight} ({svgPart.partHeight}/{svgPart.yOffset}) => yPos:{wholeSvg.picHeight - svgPart.partHeight - svgPart.yOffset}
-                </text>
-                <text
-                    x={wholeSvg.picWidth}
-                    y={wholeSvg.picHeight - svgPart.yOffset}
-                    textAnchor="end"
-                    dominantBaseline="text-top"
-                >
-                    '{svgPart.name}' H:{wholeSvg.picHeight} ({svgPart.partHeight}/{svgPart.yOffset}) => yPos:{wholeSvg.picHeight - svgPart.yOffset}
-                </text>
+                    <line
+                        x1={50}
+                        y1={50}
+                        x2={100}
+                        y2={100}
+                    />
+                    <rect
+                        x={wholeSvg.picWidth * 0.75}
+                        y={wholeSvg.picHeight - svgPart.partHeight - svgPart.yOffset}
+                        width={wholeSvg.picWidth / 10}
+                        height={svgPart.partHeight}
+                        fill="blue"
+                        stroke="yellow" // Optional: Add stroke to highlight the rectangle
+                        strokeWidth="10"
+                    />
+                    <rect
+                        x={(wholeSvg.picWidth / 4) + 45}
+                        y={wholeSvg.picHeight - svgPart.partHeight - svgPart.yOffset}
+                        width={wholeSvg.picWidth / 5}
+                        height={svgPart.partHeight}
+                        fill="none"
+                        stroke="black" // Optional: Add stroke to highlight the rectangle
+                        strokeWidth="1">
+                    </rect>
+                    <text
+                        x={0}
+                        y={wholeSvg.picHeight - svgPart.partHeight - svgPart.yOffset}
+                        textAnchor="start"
+                        dominantBaseline="hanging"
+                    >
+                        '{svgPart.name}' H:{wholeSvg.picHeight} ({svgPart.partHeight}/{svgPart.yOffset}) => yPos:{wholeSvg.picHeight - svgPart.partHeight - svgPart.yOffset}
+                    </text>
+                    <text
+                        x={wholeSvg.picWidth}
+                        y={wholeSvg.picHeight - svgPart.yOffset}
+                        textAnchor="end"
+                        dominantBaseline="text-top"
+                    >
+                        '{svgPart.name}' H:{wholeSvg.picHeight} ({svgPart.partHeight}/{svgPart.yOffset}) => yPos:{wholeSvg.picHeight - svgPart.yOffset}
+                    </text>
 
                 </>
             }
@@ -124,18 +124,29 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
                         //console.log("Testb SongPicPart ", keyData)
 
                         return (
-                            <rect
-                                xid={entry.id}
-                                xdebug={keyData.debug}
-                                key={entry.id}
-                                x={keyData.x1}
-                                y={keyData.y1}
-                                width={keyData.xd}
-                                height={keyData.yd}
-                                fill={keyData.color}
-                                stroke="black" // Optional: Add stroke to highlight the rectangle
-                                strokeWidth="1">
-                            </rect>
+                            <>
+                                <rect
+                                    xid={entry.id}
+                                    xdebug={keyData.debug}
+                                    key={entry.id}
+                                    x={keyData.x1}
+                                    y={keyData.y1}
+                                    width={keyData.xd}
+                                    height={keyData.yd}
+                                    fill={keyData.color}
+                                    stroke="black" // Optional: Add stroke to highlight the rectangle
+                                    strokeWidth="1">
+                                </rect>
+                                <text
+                                    xid={entry.id}
+                                    xdebug={keyData.debug}
+                                    x={keyData.x1 + (keyData.xd/2)}
+                                    y={keyData.y1 + keyData.yd}
+                                    textAnchor="middle"
+                                    font-weight="bold"
+                                >{keyData.keyId.noteC.replaceAll('S', '#')}</text>
+
+                            </>
                         );
                     } else if (
                         entry.etype === "A"
@@ -152,7 +163,7 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
                         //console.log("activeData.map:  keyData ", keyData)
 
                         return (
-                            <React.Fragment key={entry.id+"_"}>
+                            <React.Fragment key={entry.id + "_"}>
                                 <text
                                     key={entry.id + "T"}
                                     x={(keyData.xd - keyData.x1) / 1.0}
