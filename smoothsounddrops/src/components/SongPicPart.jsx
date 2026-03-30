@@ -4,7 +4,7 @@ import { calcKeyData, isInTimeRange, allKeyboardKeys } from "../services/keyCalc
 import { getUpdatedStructAndIndex } from "../services/songPicConfig"
 
 
-function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index, onToneFill }) {
+function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index, onToneFill, aktuelleNoten }) {
     //console.log("In SongPicPart ", timeElapsed, " ", svgPart)
     //console.log(wholeSvg)
     //console.log(svgPart)
@@ -45,7 +45,9 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
 
     return (
         <>
-            {svgPart.debug &&
+            {
+                // Debug
+                svgPart.debug &&
                 <>
                     <line
                         x1={50}
@@ -91,6 +93,7 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
                 </>
             }
             {
+                // Rand um den Bereich (wholeSvg)
                 <rect
                     x={0}
                     y={wholeSvg.picHeight - svgPart.partHeight - svgPart.yOffset}
@@ -104,28 +107,44 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
 
 
             {
-
+                // foreach element
                 activeData/*data*/.map((entry, index) => {
                     if (entry.etype === "T") {
                         const keyData = calcKeyData(entry, index, wholeSvg, svgPart, timeElapsed);
-
-                        /*
-                        Testb SongPicPart  
-                            Object { 
-                            x1: 1491.7417410714286, 
-                            xd: 14.139732142857142, 
-                            y1: 512.64, 
-                            yd: 38.44800000000001, 
-                            color: "rgb(90, 255, 255)", 
-                            key: {…}, 
-                            keyId: {…}, 
-                            debug: 'y1:38.44800000000001 y2:0 c:{"sSspeedTimeMs":200,"eSspeedTimeMs":500} key:{"pitch":"_8_FS_Gb","startMs":200,"endMs":500,"etype":"T","id":"931"} keyId:{"noteUid":52,"keyUid":"931","isBlack":true,"oktav":7,"noteC":"FS","noteI":3,"tone":"F#7","toneDuration":0.3}, partSvg:{"name":"KeyB","timeRange":500,"timeOffset":0,"partHeight":64.08000000000001,"yOffset":64.08000000000001,"useTones":false,"debug":true,"isKeyBoard":true}, 0' }
-                        */
-                        //console.log("Testb SongPicPart ", keyData)
-
-                        return (
-                            <>
-                                <rect
+                        // Es ist ein etype "T" => Echte Note
+                        if (svgPart.isKeyBoard === false) {
+                            // Es ist nicht das schwarz/weisse Keyboard
+                            return (
+                                <>
+                                    <rect
+                                        xid={entry.id}
+                                        xdebug={keyData.debug}
+                                        key={entry.id}
+                                        x={keyData.x1}
+                                        y={keyData.y1}
+                                        width={keyData.xd}
+                                        height={keyData.yd}
+                                        fill={keyData.color}
+                                        stroke="black" // Optional: Add stroke to highlight the rectangle
+                                        strokeWidth="1">
+                                    </rect>
+                                    <text
+                                        xid={entry.id}
+                                        xdebug={keyData.debug}
+                                        x={keyData.x1 + (keyData.xd / 2)}
+                                        y={keyData.y1 + keyData.yd - 1}
+                                        textAnchor="middle"
+                                        font-weight="bold"
+                                        font-size="0.6rem"
+                                    >{keyData.keyId.noteC.replaceAll('S', '#')}</text>
+                                </>
+                            );
+                        } else {
+                            // Es ist das schwarz/weisse Keyboard
+                            if (keyData.keyId.isBlack) {
+                                // Es ist eine schwarze Taste
+                                let color = aktuelleNoten.includes(entry.pitch) ? "darkgray" : "black";
+                                return (<rect
                                     xid={entry.id}
                                     xdebug={keyData.debug}
                                     key={entry.id}
@@ -133,21 +152,38 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
                                     y={keyData.y1}
                                     width={keyData.xd}
                                     height={keyData.yd}
-                                    fill={keyData.color}
+                                    fill={color}
+                                    stroke="black" 
+                                    strokeWidth="1">
+                                </rect>);
+                            } else {
+                                // Es ist eine weisse Taste
+                                let color = aktuelleNoten.includes(entry.pitch) ? "darkgray" : "white";
+                                return (<><rect
+                                    xid={entry.id}
+                                    xdebug={keyData.debug}
+                                    key={entry.id}
+                                    x={keyData.x1}
+                                    y={keyData.y1}
+                                    width={keyData.xd}
+                                    height={keyData.yd}
+                                    fill={color}
                                     stroke="black" // Optional: Add stroke to highlight the rectangle
                                     strokeWidth="1">
                                 </rect>
-                                <text
-                                    xid={entry.id}
-                                    xdebug={keyData.debug}
-                                    x={keyData.x1 + (keyData.xd/2)}
-                                    y={keyData.y1 + keyData.yd}
-                                    textAnchor="middle"
-                                    font-weight="bold"
-                                >{keyData.keyId.noteC.replaceAll('S', '#')}</text>
-
-                            </>
-                        );
+                                    {keyData.keyId.noteC === "C" &&
+                                        <text
+                                            xid={entry.id}
+                                            xdebug={keyData.debug}
+                                            x={keyData.x1 + (keyData.xd / 2)}
+                                            y={keyData.y1 + keyData.yd - 1}
+                                            textAnchor="middle"
+                                            font-weight="bold"
+                                            font-size="0.6rem"
+                                        >{keyData.keyId.tone}</text>}
+                                </>);
+                            }
+                        }
                     } else if (
                         entry.etype === "A"
                         && svgPart.showTactLines === true

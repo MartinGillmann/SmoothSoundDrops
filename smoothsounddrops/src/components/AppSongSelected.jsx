@@ -2,7 +2,7 @@
 //import Test from './Test';
 import AnyButton from '../components/AnyButton';
 import SongPic from '../components/SongPic';
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import backendApi from "../services/BackendApi";
 import { getWholeSvg, getPartSvg, getPartSvg_V2, getPartSvg_V3, getCallbacks } from "../services/songPicConfig"
 import { calcKeyId } from "../services/keyCalculator"
@@ -10,6 +10,8 @@ import React from "react";
 import * as Tone from "tone";
 import TimeSlider from './TimeSlider';
 import { useScreenSize } from "../hooks/useScreenSize"
+import { isInTimeRange_V2 } from "../services/keyCalculator"
+
 
 
 
@@ -157,6 +159,20 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
         doResetNeeded()
     }, [song_btn_count]);
 
+    const aktuelleNoten = useMemo(() => {
+        let ps = [];
+        if (the_song_data !== null) {
+            the_song_data.map(sd => {
+                if (sd.etype === "T") {
+                    if (isInTimeRange_V2(sd, 0, 100, s_time_elapsed)) {
+                        ps = [...ps, sd.pitch]
+                    }
+                }
+            });
+        }
+        return ps;
+    }, [s_time_elapsed]);
+
     function actOnStartStop() {
         setIsActive((prevState) => !prevState);
     }
@@ -276,6 +292,7 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
                 allParts={s_all_parts}
                 allNotesPlayed={s_tones_played}
                 onToneFill={(updatedStructAndIndex) => handleToneFill(updatedStructAndIndex)}
+                aktuelleNoten={aktuelleNoten}
             />
         </div>
     )

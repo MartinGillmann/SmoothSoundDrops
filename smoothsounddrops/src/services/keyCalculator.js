@@ -66,19 +66,15 @@ const calcKeyColor = (key) => {
 
 }
 
-const timeCorrectedMSVal = (key, partSvg, timeElapsed) => {
+const timeCorrectedMSVal = (key, timeElapsed) => {
     const sSspeedTimeMs = key.startMs - timeElapsed
     const eSspeedTimeMs = key.endMs - timeElapsed
     return {sSspeedTimeMs, eSspeedTimeMs}
 }
 
 export const isInTimeRange = (key, partSvg, timeElapsed) => {
-    //console.log("In isInTimeRange")
-    //console.log(key)
-    //console.log(partSvg)
-    //console.log(timeElapsed)
 
-    const c = timeCorrectedMSVal(key, partSvg, timeElapsed)
+    const c = timeCorrectedMSVal(key, timeElapsed)
 
     let ret = false
     if (c.eSspeedTimeMs < partSvg.timeOffset) {
@@ -89,16 +85,22 @@ export const isInTimeRange = (key, partSvg, timeElapsed) => {
         ret = true
     }
 
-//    if (ret === true && cbOnValue !== null) {
-//        partSvg.cbToParent(calcKeyId(key), timeElapsed)
-//    }
+    return ret
+}
 
-//    const s1 = c.sSspeedTimeMs - partSvg.timeOffset
-//    const e1 = c.eSspeedTimeMs - partSvg.timeOffset
-//    let ret = ((s1 >= 0) || (e1 <= partSvg.timeRange)) // todo
+export const isInTimeRange_V2 = (key, timeOffset, timeRange, timeElapsed) => {
 
-    //console.log(c)
-    //console.log(`Out isInTimeRange ${ret}`)
+    const c = timeCorrectedMSVal(key, timeElapsed)
+
+    let ret = false
+    if (c.eSspeedTimeMs < timeOffset) {
+        ret = false
+    } else if (c.sSspeedTimeMs > (timeOffset + timeRange)) {
+        ret = false
+    } else {
+        ret = true
+    }
+
     return ret
 }
 
@@ -154,7 +156,7 @@ export const calcKeyData = (key, index, wholeSvg, partSvg, timeElapsed) => {
     //console.log(xd)
 
     // Y <<<<<<<<<<<<<<<<<<<
-    const c = timeCorrectedMSVal(key, partSvg, timeElapsed)
+    const c = timeCorrectedMSVal(key, timeElapsed)
     let y1 = c_calculation(partSvg, c.sSspeedTimeMs);
     let y2 = c_calculation(partSvg, c.eSspeedTimeMs);
     if (y2 < 0) { y2 = 0 }

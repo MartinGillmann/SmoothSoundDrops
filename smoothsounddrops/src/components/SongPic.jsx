@@ -2,7 +2,7 @@
 
 import {SongPicParts} from "./SongPicParts"
 
-function SongPic({ data, wholeSvg, timeElapsed, allParts, allNotesPlayed, onToneFill }) {
+function SongPic({ data, wholeSvg, timeElapsed, allParts, allNotesPlayed, onToneFill, aktuelleNoten }) {
     //console.log("In SongPic ", timeElapsed, " ", data)
 
     if (!data || !Array.isArray(data)) {
@@ -15,7 +15,15 @@ function SongPic({ data, wholeSvg, timeElapsed, allParts, allNotesPlayed, onTone
                 width={wholeSvg.picWidth} 
                 height={wholeSvg.picHeight} 
                 style={{ border: "1px solid black" }}>
-                <SongPicParts data={data} wholeSvg={wholeSvg} timeElapsed={timeElapsed} allParts={allParts} allNotesPlayed={allNotesPlayed} onToneFill={onToneFill} />
+                <SongPicParts
+                    data={data}
+                    wholeSvg={wholeSvg}
+                    timeElapsed={timeElapsed}
+                    allParts={allParts}
+                    allNotesPlayed={allNotesPlayed}
+                    onToneFill={onToneFill}
+                    aktuelleNoten={aktuelleNoten}
+                />
             </svg>
         </div>
     );

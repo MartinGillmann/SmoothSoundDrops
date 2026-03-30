@@ -1,7 +1,7 @@
 import SongPicPart from "./SongPicPart"
 
 
-export function SongPicParts({ data, wholeSvg, timeElapsed, allParts, allNotesPlayed, onToneFill }) {
+export function SongPicParts({ data, wholeSvg, timeElapsed, allParts, allNotesPlayed, onToneFill, aktuelleNoten }) {
     //console.log("In SongPicParts ", timeElapsed, " ", allNotesPlayed, " ")
 
     return (
@@ -18,6 +18,7 @@ export function SongPicParts({ data, wholeSvg, timeElapsed, allParts, allNotesPl
                         notesPlayed={allNotesPlayed[index]}
                         index={index}
                         onToneFill={onToneFill}
+                        aktuelleNoten={aktuelleNoten}
                         key={index} />
                 );
             })
