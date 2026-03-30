@@ -39,6 +39,7 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
 
     if (svgPart.useTones === true) {
         fillToneIfAny(activeData)
+        return null;
     }
 
     //console.log("Testa SongPicPart ", svgPart.partHeight)
@@ -135,7 +136,7 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
                                         y={keyData.y1 + keyData.yd - 1}
                                         textAnchor="middle"
                                         font-weight="bold"
-                                        font-size="0.6rem"
+                                        font-size="0.4rem"
                                     >{keyData.keyId.noteC.replaceAll('S', '#')}</text>
                                 </>
                             );
@@ -179,7 +180,7 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
                                             y={keyData.y1 + keyData.yd - 1}
                                             textAnchor="middle"
                                             font-weight="bold"
-                                            font-size="0.6rem"
+                                            font-size="0.4rem"
                                         >{keyData.keyId.tone}</text>}
                                 </>);
                             }
@@ -203,7 +204,8 @@ function SongPicPart({ data, wholeSvg, timeElapsed, svgPart, notesPlayed, index,
                                 <text
                                     key={entry.id + "T"}
                                     x={(keyData.xd - keyData.x1) / 1.0}
-                                    y={keyData.y1}
+                                    y={keyData.y1 - 2}
+                                    font-size="0.6rem"
                                     textAnchor="end" fontSize="16" fill="black">
                                     {keyData.keytext}
                                 </text>

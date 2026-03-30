@@ -21,13 +21,18 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
     //console.log("In AppSongSelected ", the_song_data)
 
     const calcHeight = () => {
-        if (window.innerHeight === 669) {
-            return 585;
-        }
-        return window.innerWidth * 0.83;
+//        console.log("calcHeight ", window.innerHeight, " ", window.innerWidth, " ", window.outerWidth, "/", window.outerHeight);
+        return 490;
+//        return window.innerWidth * 0.83;
+    }
+    const calcWidth = () => {
+        // window.innerWidth * 0.95
+ //       console.log("calcWidth ", window.innerHeight, " ", window.innerWidth, " ", window.outerWidth, "/", window.outerHeight);
+        return 345;
+        //        return window.innerWidth * 0.83;
     }
 
-    const [picWidth, setPicWidth] = useState(window.innerWidth * 0.95);
+    const [picWidth, setPicWidth] = useState(calcWidth());
     const [picHeight, setPicHeight] = useState(calcHeight());
 
     const keyWidth = picWidth / 56;
@@ -149,6 +154,9 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
     useEffect(() => {
         const doResetNeeded = () => {
             if (s_last_song_btn_count !== song_btn_count) {
+
+                onScreen_WM();
+
                 actOnReset()
                 set_last_song_btn_count(song_btn_count)
                 //console.log("s_last_song_btn_count")
@@ -234,21 +242,25 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
         }
     }
 
+    function logPicSize() {
+        console.log("PicWH:", picWidth, "/", picHeight);
+    }
+
     function onScreen_HP() {
         setPicHeight(picHeight + 10);
-        console.log(picHeight);
+        logPicSize();
     }
     function onScreen_HM() {
         setPicHeight(picHeight - 10);
-        console.log(picHeight);
+        logPicSize();
     }
     function onScreen_WP() {
         setPicWidth(picWidth + 10);
-        console.log(picWidth);
+        logPicSize();
     }
     function onScreen_WM() {
         setPicWidth(picWidth - 10);
-        console.log(picWidth);
+        logPicSize();
     }
 
 
@@ -273,16 +285,18 @@ function AppSongSelected({ the_song_data, song_btn_count, onResetSongBtn }) {
                 <AnyButton text="<==" onclick={actOnArrowLeft} />
                 <AnyButton text="==>" onclick={actOnArrowRight} />
                 <div>{s_time_elapsed}ms</div>
-                <TimeSlider  
+                <AnyButton text="Screen H-" onclick={onScreen_HM} />
+                <AnyButton text="Screen H+" onclick={onScreen_HP} />
+                <AnyButton text="Screen W-" onclick={onScreen_WM} />
+                <AnyButton text="Screen W+" onclick={onScreen_WP} />
+            </div>
+            <div className="flex justify-start space-x-2">
+                <TimeSlider
                     in_default={50}
                     onValChanged={speed_onValChanged}
                     getText={speed_getText}
                     in_style_background={timeSliderBackground}
                 />
-                <AnyButton text="Screen H-" onclick={onScreen_HM} />
-                <AnyButton text="Screen H+" onclick={onScreen_HP} />
-                <AnyButton text="Screen W-" onclick={onScreen_WM} />
-                <AnyButton text="Screen W+" onclick={onScreen_WP} />
             </div>
 
             <SongPic

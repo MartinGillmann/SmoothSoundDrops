@@ -22,7 +22,7 @@ export const calcKeyId = (key) => {
     };
     const noteC = sp[2]
     const noteI = noteC.split(" ").map(note => noteToNumberMap[note] || 0)[0];
-    let noteUid = (7 * oktav) + noteI;
+    let noteUid = (7 * (oktav-1)) + noteI;
     let keyUid = key.id
 
     let tone = null;
@@ -161,7 +161,7 @@ export const calcKeyData = (key, index, wholeSvg, partSvg, timeElapsed) => {
     let y2 = c_calculation(partSvg, c.eSspeedTimeMs);
     if (y2 < 0) { y2 = 0 }
     if (y1 > partSvg.partHeight) { y1 = partSvg.partHeight }
-    let debug = `y1:${y1} y2:${y2}`
+    let debug = `y1:${y1} y2:${y2} x1:${x1}`
     //console.log(debug)
 
 
